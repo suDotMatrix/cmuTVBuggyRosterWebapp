@@ -1,0 +1,77 @@
+ PUSH Update STUDENT Update HEATS
+CONNECTED
+	•	CURRENT HEAT
+	◦	[3] CMUTV vs AB GRUDGE MATCH
+	◦	
+	◦	NEXT HEAT
+	◦	PREV HEAT
+	◦	 
+	•	[0] HEAT_DISPLAY_NAME | TEAM 1 NAME | TEAM 2 NAME | TEAM 3 NAME  [1] CMUTV vs WRCT GRUDGE MATCH | CMUTV | CMUTV B | WRCT  [2] CMUTV vs W3VC GRUDGE MATCH | CMUTV | CMUTV B | WRCT  [3] CMUTV vs AB GRUDGE MATCH | CMUTV | CMUTV B | WRCT  [4] CMUTV vs AB GRUDGE MATCH | CMUTV | CMUTV B | WRCT  [5] CMUTV vs AB GRUDGE MATCH | CMUTV | CMUTV B | WRCT  [6] CMUTV vs AB GRUDGE MATCH | CMUTV | CMUTV B | WRCT  [7] CMUTV vs AB GRUDGE MATCH | CMUTV | CMUTV B | WRCT  [8] CMUTV vs AB GRUDGE MATCH | CMUTV | CMUTV B | WRCT  [9] CMUTV vs AB GRUDGE MATCH | CMUTV | CMUTV B | WRCT   
+	•	Player Card  
+	◦	AndrewID
+	◦	 
+	◦	LOAD
+	◦	Name
+	◦	Max Simpson 
+	◦	Photo File
+	◦	Photo ID Here 
+	◦	
+	•	TEAM 1
+	◦	AUTOFILL FROM SHEETS
+	◦	Team Name
+	◦	
+	◦	DRIVE
+	◦	
+	◦	
+	◦	 
+	◦	HILL 1
+	◦	
+	◦	
+	◦	 
+	◦	HILL 2
+	◦	
+	◦	
+	◦	 
+	◦	HILL 3
+	◦	
+	◦	
+	◦	 
+	◦	HILL 4
+	◦	
+	◦	
+	◦	 
+	◦	HILL 5
+	◦	
+	◦	
+	◦	 
+	•	TEAM 2
+	◦	AUTOFILL FROM SHEETS
+	◦	Team Name
+	◦	
+	◦	DRIVE
+	◦	
+	◦	
+	◦	 
+	◦	HILL 1
+	◦	
+	◦	
+	◦	 
+	◦	HILL 2
+	◦	
+	◦	
+	◦	 
+	◦	HILL 3
+	◦	
+	◦	
+	◦	 
+	◦	HILL 4
+	◦	
+	◦	
+	◦	 
+	◦	HILL 5
+	◦	
+	◦	
+	◦	 
+	•	4
+	•	5
+	•	6 Tags:  

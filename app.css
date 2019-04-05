@@ -1,0 +1,273 @@
+/* Style the header */
+
+.menubar {
+  padding: 0px 0px;
+  margin: 0px;
+  background: #5F5F5F;
+  color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height : 40px; 
+}
+/* CSS Document */
+
+#menubar1 img {
+	margin: 0px;
+	padding: 0px;
+	height: 100%;
+}
+
+body{
+    background-color: #DBDBDB;
+	  margin: 0px;
+
+}
+
+.square {
+  width: 200px;  /* Or whatever */
+  height: 200px; /* Or whatever */
+  margin: auto;  /* Magic! */
+
+}
+
+.defaultRect {
+  width: 400px;  /* Or whatever */
+  height: 200px; /* Or whatever */
+  margin: auto;  /* Magic! */
+}
+
+.formTitle{
+	font-size: 1.2em;
+	font-family: Helvetica;
+}
+
+.card{
+/*	background:#FFFFFF;
+	border-color: #707070;
+	*/
+background: tomato;
+  padding: 5px;
+  /*width: 600px;*/
+	flex-basis: 40%;
+	min-width: 400px;
+
+  min-height: 200px;
+  margin-top: 10px;
+  color: white;
+  font-weight: bold;
+	
+}
+
+
+.formElement{
+flex-grow: 0;
+	padding: 10px
+}
+
+.playerPhotoPreview{
+	width: 35px;
+	height: 40px;
+}
+
+
+.flex-container{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  
+  -webkit-flex-flow: row wrap;
+  justify-content: space-around;	
+}
+
+#controlContainer{
+	
+	margin: auto;
+	padding: 20px;
+	padding-top: 40px;
+	
+}
+
+#heatListDisplayContainer{
+	background-color: #FF8B77;
+	height: 140px; 
+	overflow-y: scroll;
+}
+.heatListElement{
+		font-size: 0.7em;
+		font-family: Helvetica;
+		font-weight: 300;
+		padding: 5px;
+
+}
+
+.activeHeatListElement{
+	background-color: #F70000;
+}
+
+
+.flex-container-row{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  
+  -webkit-flex-flow: row nowrap;
+}
+
+
+.loadButton{
+	height: 20px;
+}
+
+.playerPhoto{
+	width: 100px;
+	height: 120px;
+
+}
+
+.uneditableForm div{
+	background-color: #EEEEEE;
+	color: black;
+	padding: 2px;
+	border: medium;
+	border-color: #000000;
+	font-weight: 400;
+	font-size: 1em;
+	font-family: Helvetica, Arial, "sans-serif"
+}
+
+.menubarButton {
+	height: 100%;
+    margin: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+	float: right;
+}
+
+
+/* Connection status bar*/
+
+#connectionStatusDiv{
+	line-height: 40px;
+	background-color: #EE0003;
+  	text-align: center;
+	font-weight: 400;
+	font-size: 1em;
+	font-family: Helvetica, Arial, "sans-serif"
+}
+
+#pushToServerButton {
+	height: 100%;
+    margin: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    /* position: absolute; */
+    float: right;
+	color:black;
+	background-color: #2ecc71;
+	border: none;
+	font-weight: 400;
+	font-size: 20px;;
+
+	
+}
+
+#pushToServerButton:hover {
+
+    background-color: #f44336;
+    color: white;
+}
+
+#pushToServerButton:active {
+    background-color:#8E0F05;
+    color: white;
+}
+
+.pushButton{
+	float: right;
+}
+
+/* Visibilty form Styles*/
+
+.visbilityForm{
+	float: right;
+}
+.visbilityForm img{
+	width : 35px;
+	height: 35px;
+}
+
+/* Slider Styles*/
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+
+.ui-menu-item{
+	background-color: white;
+	list-style-type: none;
+
+}
+
+.ui-menu-item:hover{
+	background-color:#347AFA;
+}
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
