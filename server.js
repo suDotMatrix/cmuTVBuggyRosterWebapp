@@ -1,7 +1,7 @@
 var WebSocketServer = require('websocket').server;
 var googleInterface = require('./serverGoogleAuth.js');
 var http = require('http');
-var webSocketsServerPort = 1338;
+var webSocketsServerPort = 3001;
 
 var clients = [];
 
@@ -10,6 +10,9 @@ var DB = {
     students: [],
     andrewid : []
 }
+
+
+
 // Start by Authorizing to Google Sheets 
 
 var server = http.createServer(function (request, response) {
@@ -51,7 +54,10 @@ wsServer.on('request', function (request) {
                 switch(command.cmd){
 
                     case "PULL_STUDENT_DATA" :
-                    googleInterface.updateStudentData(OnStudentDataUpdate);
+                    send("CONTROL_CLIENT=>UPDATE_STATUS",{color : "#f1c40f",msg:"Refresh Data"})
+                    googleInterface.updateStudentData((studentData)=>{
+                        OnStudentDataUpdate(studentData);
+                    },{ForceProfilePhotoDowload:False,ProgressCallback : OnServerStatusUpdate});
                     break;
 
                     case "PULL_HEAT_DATA" :
@@ -62,6 +68,9 @@ wsServer.on('request', function (request) {
                     
                     // For now, forward command 
                     send(command.cmd,command.data);
+
+                    case "REQUEST_SERVER_STATUS" :
+                        
 
                     break;
 
@@ -124,6 +133,17 @@ function OnStudentDataUpdate(studentData) {
     // Send a command to client 
     send("CONTROL_CLIENT=>UPDATE_STUDENTS",studentData);
 
+    // Download Student Photos
+
+    // Reprocess Student Photos
+
+
+
+}
+
+function OnServerStatusUpdate(message,color="green"){
+    
+    send("CONTROL_CLIENT=>UPDATE_STATUS",{msg:message,color:color});
 }
 
 
