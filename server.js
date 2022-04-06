@@ -51,7 +51,7 @@ wsServer.on('request', function (request) {
         try {
             if (message.type === 'utf8') {
                 // process WebSocket message
-                console.log("MESSAGE : " + message.utf8Data);
+                // console.log("MESSAGE : " + message.utf8Data);
                 // Always should be JSON data 
 
                 var command = JSON.parse(message.utf8Data)
