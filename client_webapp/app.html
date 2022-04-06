@@ -19,15 +19,15 @@
         <img src="twitter_avatar_400x400.png" alt="">
 
 
+
         <button id="pushToServerButton">PUSH</button>
-        <button class ="menubarButton pgmbutton" id="OBSTeam1Button">PGM TEAM 1</button>
-        <button class = "menubarButton pgmbutton" id="OBSTeam2Button">PGM TEAM 2</button>
         <button class="menubarButton" id="updateStudents" style="background-color: white;">Update STUDENT</button>
         <button class="menubarButton" id="updateHeats" style="background-color: white;">Update HEATS</button>
         <div class="menubarButton" id="connectionStatusDiv" style="background-color: rgb(46, 204, 113);">CONNECTED</div>
         <div class="menubarButton" id="serverStatusDiv" style="background-color: rgb(46, 204, 113);">SERVER READY</div>
 
     </div>
+
 
 
 
@@ -44,7 +44,9 @@
                 <form id="currHeatBox" class="formElement">
                     <input id="currHeatBoxval" style="width: 30px;" maxlength="2" type="number" name="currentHeat">
                 </form>
+
             </ul>
+
 
             <div id="heatListDisplayContainer"></div>
         </li>
@@ -86,6 +88,25 @@
             </ul>
         </li>
     -->
+
+        <li class="card">2
+            <div class="formTitle">OBS Controls</div>
+            <ul class="flex-container-row">
+                <li>
+                    <button class="pgmbutton" id="OBSTeam1Button">PGM TEAM 1</button>
+                    <label class="formTitle" >OBS set scene "TEAM1"</label>
+
+                </li>
+            </ul>
+            <ul class="flex-container-row">
+                <li>
+                    <button class="pgmbutton" id="OBSTeam2Button">PGM TEAM 2</button>
+                    <label class="formTitle" >OBS set scene "TEAM2"</label>
+                </li>
+            </ul>
+
+
+        </li>
 
         <li class="card">
             <div class="formTitle">TEAM 1</div>

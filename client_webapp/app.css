@@ -272,7 +272,32 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-.pgmbutton{
-	color: black;
-	background-color: "#EE0003";
+
+
+
+.pgmbutton {
+	height: 100%;
+    margin: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    /* position: absolute; */
+	color:black;
+	background-color: #2ecc71;
+  font-weight: 400;
+	font-size: 20px;;
+
+	
+}
+
+.pgmbutton:hover {
+
+    background-color: #f44336;
+    color: white;
+}
+
+.pgmbutton:active {
+    background-color:#8E0F05;
+    color: white;
 }

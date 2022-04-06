@@ -121,7 +121,10 @@ function reconnect() {
 					var team1Button = document.getElementById("OBSTeam1Button");
 					var team2Button = document.getElementById("OBSTeam2Button");
 					team1Button.innerText = "PGM TEAM 1"
-					team2Button.innerText = "PGM TEAM 2"
+					team2Button.innerText = "PGM TEAM 2" 
+					team1Button.style.backgroundColor = "#2ecc71"
+					team2Button.style.backgroundColor = "#2ecc71"
+
 					break;
 
 				case "CONTROL_CLIENT=>OBS_ON_DISCONNECT":
@@ -129,6 +132,8 @@ function reconnect() {
 					var team2Button = document.getElementById("OBSTeam2Button");
 					team1Button.innerText = "OBS DISCONNECTED"
 					team2Button.innerText = "CLICK TO RECONNECT"
+					team1Button.style.backgroundColor = "#f44336"
+					team2Button.style.backgroundColor = "#f44336"
 					break;
 
 
