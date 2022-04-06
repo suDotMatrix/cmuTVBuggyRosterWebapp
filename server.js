@@ -1,7 +1,14 @@
 var WebSocketServer = require('websocket').server;
 var googleInterface = require('./serverGoogleAuth.js');
 var http = require('http');
+const OBSWebSocket = require('obs-websocket-js');
+const OBS_WEBSOCKET_PASSWORD = "PASSWORD_HERE"
+
 var webSocketsServerPort = 3001;
+const obs = new OBSWebSocket();
+obs.on('error', err => {
+    console.error('socket error:', err);
+});
 
 var clients = [];
 
@@ -74,6 +81,10 @@ wsServer.on('request', function (request) {
 
                     break;
 
+                    case "CMD_OBS_SET_SCENE=>SERVER":
+                        sendOBSCommandSetScene(command.data)
+                    break;
+
                     default:
                     console.log("INVALID COMMAND RECEIVED", command);
                 }
@@ -93,6 +104,7 @@ wsServer.on('request', function (request) {
 
     });
 });
+
 
 function remove(array, element) {
     const index = array.indexOf(element);
@@ -146,4 +158,37 @@ function OnServerStatusUpdate(message,color="green"){
     send("CONTROL_CLIENT=>UPDATE_STATUS",{msg:message,color:color});
 }
 
+async function sendOBSCommandSetScene(sceneID){
+    console.log("SET OBS SCENE TEAM " + sceneID)
+    try {
+        await obs.send('SetCurrentScene', {
+            'scene-name': sceneID
+        });
+        send("CONTROL_CLIENT=>OBS_ON_CONNECT","")
+        
+    } catch (error) {
+        console.error(error)
+        if(error.code == "NOT_CONNECTED"){
+            // Try and Reconnect
+            console.log("Try Reconnect")
+            obsTryReconnect()
+        }
+        
+    }
+   
+    // if not connected try and connect 
+}
+
+async function obsTryReconnect(){
+    try {
+        await obs.connect({ address: 'localhost:4444', password: OBS_WEBSOCKET_PASSWORD});
+    } catch (error) {
+        console.log("OBS Connect Failed")
+        OnServerStatusUpdate(error.message,"rgb(238, 0, 3)")
+    }
+}
+
+obs.on('ConnectionOpened', (data) =>  send("CONTROL_CLIENT=>OBS_ON_CONNECT",""));
+
+obs.on('ConnectionClosed', (data) => send("CONTROL_CLIENT=>OBS_ON_DISCONNECT",""));
 

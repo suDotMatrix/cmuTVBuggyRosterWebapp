@@ -1,4 +1,3 @@
-// JavaScript Document
 
 // We assume that the broweser can support websocket. If not, show an alert. 
 // Whole-script strict mode syntax
@@ -99,10 +98,6 @@ function reconnect() {
 
 					// Relink ALL Student profiles to HEATS 
 					
-
-
-
-
 					// Update interface. 
 
 					// Get current heat 
@@ -120,10 +115,22 @@ function reconnect() {
 					var serverStatusBar = document.getElementById("serverStatusDiv");
 					serverStatusBar.style.backgroundColor = command.data.color;
 					serverStatusBar.innerHTML = (command.data.msg) ? command.data.msg:"";
-
-
-					
 					break;
+
+				case "CONTROL_CLIENT=>OBS_ON_CONNECT":
+					var team1Button = document.getElementById("OBSTeam1Button");
+					var team2Button = document.getElementById("OBSTeam2Button");
+					team1Button.innerText = "PGM TEAM 1"
+					team2Button.innerText = "PGM TEAM 2"
+					break;
+
+				case "CONTROL_CLIENT=>OBS_ON_DISCONNECT":
+					var team1Button = document.getElementById("OBSTeam1Button");
+					var team2Button = document.getElementById("OBSTeam2Button");
+					team1Button.innerText = "OBS DISCONNECTED"
+					team2Button.innerText = "CLICK TO RECONNECT"
+					break;
+
 
 				default:
 					console.log("INVALID COMMAND RECEIVED", command);
@@ -239,6 +246,23 @@ $(document).ready(function () {
 		return false;
 	});
 
+	$("#OBSTeam1Button").click(function(e){
+		var command = {
+			cmd : "CMD_OBS_SET_SCENE=>SERVER",
+			data : "Team1"
+		}
+		send(command);
+
+	})
+
+	$("#OBSTeam2Button").click(function(e){
+		var command = {
+			cmd : "CMD_OBS_SET_SCENE=>SERVER",
+			data : "Team2"
+		}
+		send(command);
+
+	})
 
 	$("#pushToServerButton").click(function(e){
 		

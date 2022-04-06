@@ -60,14 +60,19 @@ function reconnect() {
                     // Update DB 
                     
 					break;
+				
                 case "PUSH_HEAT=>DISPLAY":
                     DB.activeHeat = command.data;
                 updateDisplay();
                     break;
 				case "CONTROL_CLIENT=>UPDATE_STATUS" : 
+				case "CONTROL_CLIENT=>OBS_ON_CONNECT":
+				case "CONTROL_CLIENT=>OBS_ON_DISCONNECT":
+					
 				break;
 				default:
 					console.log("INVALID COMMAND RECEIVED", command);
+				
 			}
 		} catch (e) {
 			console.log('This doesn\'t look like a valid JSON: ',
