@@ -37,8 +37,8 @@ function  watchdog(){
 reconnect();
 function reconnect() {
 
-	//connection = new WebSocket('ws://127.0.0.1:3001');
-	connection = new WebSocket ('ws:71.202.28.108:3001');
+	connection = new WebSocket('ws://127.0.0.1:3001');
+	//connection = new WebSocket ('ws:71.202.28.108:3001');
 
 	connection.onopen = function () {
 		'use strict';

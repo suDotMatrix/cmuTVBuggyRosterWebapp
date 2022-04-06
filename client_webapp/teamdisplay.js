@@ -24,9 +24,9 @@ function  watchdog(){
 }
 
 function reconnect() {
-	connection = new WebSocket ('ws:71.202.28.108:3001');
+	//connection = new WebSocket ('ws:71.202.28.108:3001');
 
-	//connection = new WebSocket('ws://127.0.0.1:1338');
+	connection = new WebSocket('ws://127.0.0.1:3001');
 //	connection = new WebSocket ('ws:128.2.66.138:1338');
 //  connection = new WebSocket ('ws:128.237.143.229:1337');
  
