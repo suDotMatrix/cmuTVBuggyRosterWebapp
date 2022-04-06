@@ -9,6 +9,8 @@ var DB = {
 	activeHeat :{}
 }
 
+const brokenImageSRC = "/img/brokenImage.png"
+
 
 reconnect();
 
@@ -62,6 +64,8 @@ function reconnect() {
                     DB.activeHeat = command.data;
                 updateDisplay();
                     break;
+				case "CONTROL_CLIENT=>UPDATE_STATUS" : 
+				break;
 				default:
 					console.log("INVALID COMMAND RECEIVED", command);
 			}
@@ -142,11 +146,30 @@ if(elementExists("team3")){
 
 
 }
+//https://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid
+function uuidv4() {
+	return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+	  (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+	);
+  }
+
 
 function updateImage (role,id){
     // Get element 
    var element =  document.getElementById(id);
-   element.src = role.photoSRC;
+   if(role == undefined){
+	   element.src = brokenImageSRC;
+	   return;
+   }
+   // Include random query string in request. This messes up the browsers caching mechanism and forces 
+   // the browser to go to the sever each time we reload the image
+   if(id.includes('Driver')){
+	   element.src = role.photoSRC['DRIVER'] + '?nocache=' + uuidv4();
+   }else{
+   	element.src = role.photoSRC['PUSHER'] + '?nocache=' + uuidv4();
+   }
+
+   
 }
 
 function updateText(text,elementID){
