@@ -277,9 +277,9 @@ input:checked + .slider:before {
 
 .pgmbutton {
 	height: 100%;
-    margin: 10px;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    margin: 0px;
+    padding-bottom: 5px;
+    padding-top: 5px;
     padding-left: 20px;
     padding-right: 20px;
     /* position: absolute; */
