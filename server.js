@@ -57,11 +57,11 @@ wsServer.on('request', function (request) {
                     send("CONTROL_CLIENT=>UPDATE_STATUS",{color : "#f1c40f",msg:"Refresh Data"})
                     googleInterface.updateStudentData((studentData)=>{
                         OnStudentDataUpdate(studentData);
-                    },{ForceProfilePhotoDowload:False,ProgressCallback : OnServerStatusUpdate});
+                    },{ForceProfilePhotoDowload:false,ProgressCallback : OnServerStatusUpdate});
                     break;
 
                     case "PULL_HEAT_DATA" :
-                    googleInterface.updateHeatData(OnHeatDataUpdate);
+                    googleInterface.updateHeatData(OnHeatDataUpdate,{ProgressCallback : OnServerStatusUpdate});
                     break;
 
                     case "PUSH_HEAT=>DISPLAY" :

@@ -119,7 +119,7 @@ function reconnect() {
 					// Update the status bar 
 					var serverStatusBar = document.getElementById("serverStatusDiv");
 					serverStatusBar.style.backgroundColor = command.data.color;
-					serverStatusBar.innerHTML = command.data.msg;
+					serverStatusBar.innerHTML = (command.data.msg) ? command.data.msg:"";
 
 
 					

@@ -15,8 +15,7 @@ const { drive } = require('googleapis/build/src/apis/drive');
 var credentials = {};
 module.exports = {
   updateStudentData: updateStudentData,
-  updateHeatData: updateBuggyHeatData,
-  updatePlayerRecords: updatePlayerRecords,
+  updateHeatData: updateBuggyHeatData
 };
 
 // Spreadsheet ID 
@@ -26,11 +25,6 @@ fs.readFile(OAUTH_SECRETS_PATH, (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
   // Authorize a client with credentials, then call the Google Sheets API.
   credentials = JSON.parse(content);
-  // authorize(JSON.parse(content), cacheBuggyStudentData);
-  // authorize(JSON.parse(content), cacheBuggyHeatData);
-  authorize(credentials, updateStudentData);
-
-
 });
 
 /**
@@ -95,37 +89,27 @@ function getNewToken(oAuth2Client, callback) {
  * Data Range : STUDENT_DATA'!A1:K
  * ID : 1R1MAh29qzwWu399t4hNNvF0-78hO486AiUkI_STLZOw
  */
-
-//
-
-
 function updateStudentData(callback, options) {
 
   authorize(credentials, function (auth) {
     fetchPlayerData(auth, options, function (studentDatabase) {
+      // Update students before images have finished processing
+      callback(studentDatabase);
 
       // Download Player Photos After
       downloadPlayerPhotos(auth, studentDatabase, options, function () {
-        // Update the student database
-        callback(studentDatabase);
+        // Originally had callback here. Moved above 
       })
     });
   });
 
 }
 
-
-function updatePlayerRecords(callback) {
-  authorize(credentials, function (auth) {
-    fetchPlayerData(auth, callback);
-  });
-}
-
 async function downloadPlayerPhotos(auth, studentDatabase, options, callback) {
   var ProgressCallback = function () { };
 
   if (options && options.ProgressCallback) {
-    ProgressCallback = options.ProgressCallback()
+    ProgressCallback = options.ProgressCallback
   }
 
   // Make sure temporary folders exist 
@@ -137,16 +121,24 @@ async function downloadPlayerPhotos(auth, studentDatabase, options, callback) {
 
   var studentsToUpdate = [];
   studentDatabase.forEach(student => {
-    if (!playercardfunctions.doesPlayerPhotoExist(student)) {
+    if (!playercardfunctions.doesPlayerPhotoExist(student) || student.customLayoutHints) {
       studentsToUpdate.push(student);
     }
   });
 
   // ForEach doesn't play nice with Async/Await. use a for loop
-  for (var i = 0; i < studentDatabase.length; i++) {
-    await updatePlayerPhoto(auth, studentsToUpdate[i], options);
+  for (var i = 0; i < studentsToUpdate.length; i++) {
+    // Curry Progress Callback 
+    // Copy Options Object / "#f39c12"
+    var localOptions = Object.assign({}, options);
+    localOptions.ProgressCallback = (msg,color)=>{
+      ProgressCallback(`[${studentsToUpdate[i].andrewid}] ${msg} (${i}/${studentsToUpdate.length})`, color);
+    }
+    await updatePlayerPhoto(auth, studentsToUpdate[i], localOptions);
   }
 
+  ProgressCallback("","#2ecc71")
+  callback()
 
 }
 
@@ -155,11 +147,11 @@ async function updatePlayerPhoto(auth, student, options) {
   const drive = google.google.drive({ version: 'v2', auth });
 
   if (options && options.ProgressCallback) {
-    ProgressCallback = options.ProgressCallback()
+    ProgressCallback = options.ProgressCallback
   }
   console.log("[" + student.andrewid + "] | Updating Photo");
+  ProgressCallback("Downloading Photo","#f39c12")
 
-  ProgressCallback("[" + student.andrewid + "] | Updaing Photo", "#f39c12");
 
   // Promise for downloading Google Drive Files 
 
@@ -187,7 +179,7 @@ async function updatePlayerPhoto(auth, student, options) {
             const imageData = response.data;
             const filePathOriginal = path.join(process.cwd(), playercardfunctions.TEMP_FOLDER_PHOTOS_ORIGINALS_PATH, originalFilename)
             await fs.promises.writeFile(filePathOriginal, Buffer.from(imageData));
-            resolve(filePathOriginal)
+            resolve({filepath : filePathOriginal,contentType:response.headers["content-type"]})
 
 
           });
@@ -197,25 +189,24 @@ async function updatePlayerPhoto(auth, student, options) {
   try {
     
  
-  const orignalPhotoFilePath = await googleDriveFileDownloadPromise
+  const fileMetadata = await googleDriveFileDownloadPromise
 
   // Convert to PNG
-
+  ProgressCallback("Updating Player Card","#f39c12")
   const playerPhotoFilePath = playercardfunctions.getPathForPlayerPhoto(student)
-  await playercardfunctions.utilsConvertPhotoToPng(orignalPhotoFilePath,playerPhotoFilePath)
+  await playercardfunctions.utilsConvertPhotoToPng(fileMetadata.filepath,playerPhotoFilePath,fileMetadata.contentType)
 
-  console.log("[" + student.andrewid + "] | Updating Player Card}");
-  ProgressCallback("[" + student.andrewid + "] | Updaing Player Card", "#f39c12");
+  console.log("[" + student.andrewid + "] | Updating Player Card");
 
   // Generate Player card
 
   await playercardfunctions.processPhoto(playerPhotoFilePath,student)
 
 } catch (error) {
-  console.error("[" + student.andrewid + "] | Error Updating Player Card}");
-  ProgressCallback("[" + student.andrewid + "] | Error Updaing Player Card", "#f39c12");
+  console.error("[" + student.andrewid + "] | Error Updating Player Card");
+  ProgressCallback("Error Updaing Player Card", "#e74c3c");
   console.log(error)
-    
+  await new Promise(r => setTimeout(r, 2000));
 }
 
 
@@ -227,14 +218,14 @@ async function updatePlayerPhoto(auth, student, options) {
 function fetchPlayerData(auth, options, callback) {
   var ProgressCallback = function () { };
   if (options && options.ProgressCallback) {
-    ProgressCallback = options.ProgressCallback()
+    ProgressCallback = options.ProgressCallback
   }
   ProgressCallback("Fetching player Data from Google", "#f39c12");
   const sheets = google.google.sheets({ version: 'v4', auth });
   // Fetch data 
   var headers = sheets.spreadsheets.values.get({
     spreadsheetId: databaseSpreadsheetID,
-    range: 'STUDENT_DATA!A:K',
+    range: 'STUDENT_DATA!A:L',
   }, (err, response) => {
     if (err) return console.log("The SHEETS API returned an error : " + err);
     if (response == undefined) {
@@ -255,7 +246,7 @@ function fetchPlayerData(auth, options, callback) {
         return;
       }
       student.email = element[0];
-      student.andrewid = element[1];
+      student.andrewid = element[1].trim();
       student.name = element[2];
       student.pronounce = element[3];
       student.majorTeam = element[4];
@@ -263,11 +254,24 @@ function fetchPlayerData(auth, options, callback) {
       student.roles = element[6].split(",");
       student.year = element[7];
       student.googleDrivePhotoLink = element[8];
+      try {
+        if(element[10]==="" || element[10] === undefined){
+          student.customLayoutHints = null
+        }else{
+          student.customLayoutHints = JSON.parse(element[10])
+        }
+      } catch (error) {
+        console.error("Failed to parse custom layout hints for student " + student.andrewid + " Expect JSON, got \""+element[10] + "\"");
+        
+      }
       student.photoDriveID = student.googleDrivePhotoLink.split("drive.google.com/open?id=")[1];
 
-      // COMPUTE PHOTO PATH 
-      var nameNoSpaces = student.name.replace(/\s/g, '');
-      student.photoSRC = "img/profiles/png/" + nameNoSpaces + "copy.png";
+      // COMPUTE PHOTO Paths for each role 
+      var photoPaths = {}; 
+      student.roles.forEach(role => {
+        photoPaths[role] = playercardfunctions.getPathForPlayerCard(student,role)
+      });
+      student.photoSRC = photoPaths;
 
 
       studentDatabase.push(student);
@@ -280,50 +284,6 @@ function fetchPlayerData(auth, options, callback) {
     }
   });
 
-}
-
-
-function cacheBuggyStudentData(auth, callback) {
-
-  const sheets = google.google.sheets({ version: 'v4', auth });
-  // Grab the data 
-  sheets.spreadsheets.values.get({
-    spreadsheetId: '1R1MAh29qzwWu399t4hNNvF0-78hO486AiUkI_STLZOw',
-    range: 'STUDENT_FORM_RESPONSES!A:K',
-  }, (err, response) => {
-
-    if (err) return console.log("The SHEETS API returned an error : " + err);
-    //   console.log(data);
-    const rows = response.data.values;
-
-    // Load all the columns into an entry for each student 
-    var studentDatabase = [];
-
-    rows.forEach(function (element) {
-      var student = {};
-      student.email = element[1];
-      student.andrewid = element[2];
-      student.name = element[3];
-      student.pronounce = element[4];
-      student.majorTeam = element[5];
-      student.school = element[6];
-      student.role = element[7];
-      student.year = element[8];
-      student.googleDrivePhotoLink = element[9];
-
-      // COMPUTE PHOTO PATH 
-      var nameNoSpaces = student.name.replace(/\s/g, '');
-      student.photoSRC = "img/profiles/png/" + nameNoSpaces + "copy.png";
-
-
-      studentDatabase.push(student);
-    });
-    console.log("STUDENT RECORDS...");
-    console.log(studentDatabase);
-    if (callback != null) {
-      callback(studentDatabase);
-    }
-  });
 }
 
 
@@ -337,28 +297,31 @@ function cacheBuggyStudentData(auth, callback) {
  * ID : 1R1MAh29qzwWu399t4hNNvF0-78hO486AiUkI_STLZOw
  */
 
-/* Weapper function */
-
-function updateBuggyHeatData(callback) {
+function updateBuggyHeatData(callback,options) {
 
   authorize(credentials, function (auth) {
-    cacheBuggyHeatData(auth, callback);
+    cacheBuggyHeatData(auth, callback,options);
   });
 
 }
 
-function cacheBuggyHeatData(auth, callback) {
+function cacheBuggyHeatData(auth, callback,options) {
+  var ProgressCallback = function () { };
+  if (options && options.ProgressCallback) {
+    ProgressCallback = options.ProgressCallback
+  }
+
+  ProgressCallback("Updating Heats","#f39c12")
 
   const sheets = google.google.sheets({ version: 'v4', auth });
 
   sheets.spreadsheets.values.get({
-    spreadsheetId: '1R1MAh29qzwWu399t4hNNvF0-78hO486AiUkI_STLZOw',
+    spreadsheetId: databaseSpreadsheetID,
     range: 'HEATS!A:Y',
-  }, (err, data) => {
+  }, (err, response) => {
 
     if (err) return console.log("The SHEETS API returned an error : " + err);
-    //   console.log(data);
-    const rows = data.values;
+    const rows = response.data.values;
 
     // Load all the columns into an entry for each student 
     var HeatsDatabase = [];
@@ -415,6 +378,7 @@ function cacheBuggyHeatData(auth, callback) {
     console.log("")
 
     if (callback != null) {
+      ProgressCallback(" ","#2ecc71")
       callback(HeatsDatabase);
     }
 
