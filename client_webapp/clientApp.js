@@ -120,20 +120,32 @@ function reconnect() {
 				case "CONTROL_CLIENT=>OBS_ON_CONNECT":
 					var team1Button = document.getElementById("OBSTeam1Button");
 					var team2Button = document.getElementById("OBSTeam2Button");
+					var team3Button = document.getElementById("OBSTeam3Button");
+
 					team1Button.innerText = "PGM TEAM 1"
-					team2Button.innerText = "PGM TEAM 2" 
+					team2Button.innerText = "PGM TEAM 2"
+					team3Button.innerText = "PGM TEAM 3"
+
+
 					team1Button.style.backgroundColor = "#2ecc71"
 					team2Button.style.backgroundColor = "#2ecc71"
+					team3Button.style.backgroundColor = "#2ecc71"
+
 
 					break;
 
 				case "CONTROL_CLIENT=>OBS_ON_DISCONNECT":
 					var team1Button = document.getElementById("OBSTeam1Button");
 					var team2Button = document.getElementById("OBSTeam2Button");
+					var team3Button = document.getElementById("OBSTeam3Button");
+
 					team1Button.innerText = "OBS DISCONNECTED"
 					team2Button.innerText = "CLICK TO RECONNECT"
+					team3Button.innerText = ""
 					team1Button.style.backgroundColor = "#f44336"
 					team2Button.style.backgroundColor = "#f44336"
+					team3Button.style.backgroundColor = "#f44336"
+
 					break;
 
 
@@ -264,6 +276,15 @@ $(document).ready(function () {
 		var command = {
 			cmd : "CMD_OBS_SET_SCENE=>SERVER",
 			data : "Team2"
+		}
+		send(command);
+
+	})
+
+	$("#OBSTeam3Button").click(function(e){
+		var command = {
+			cmd : "CMD_OBS_SET_SCENE=>SERVER",
+			data : "Team3"
 		}
 		send(command);
 
